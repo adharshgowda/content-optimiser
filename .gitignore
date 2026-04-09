@@ -67,3 +67,8 @@ pnpm-debug.log*
 
 # ---- Streamlit / tooling ----
 .streamlit/secrets.toml
+
+env folder/
+.venv/
+venv/
+node_modules/
