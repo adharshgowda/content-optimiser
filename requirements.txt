@@ -1,31 +1,28 @@
-# Core Python Utilities
+# Core Web & API
+fastapi
+uvicorn[standard]
+pydantic
 python-dotenv
+python-multipart
 requests
 aiohttp
 
-
-# LLM / Content Generation
+# AI / LLM (lightweight cloud APIs only)
 groq
-google-generativeai
-genai
+google-genai
 
-# Trend Analysis
-pytrends
+# Data (minimal)
+pandas
+numpy
 
+# Web Scraping
+beautifulsoup4
+lxml
 
-# Sentiment Analysis
-textblob
-langdetect
-transformers
-torch
-
-
-datetime
-
-# Grammar, Readability
-language-tool-python
+# Text Analysis (lightweight)
 textstat
-
+langdetect
+emoji
 
 # Google Sheets Integration
 google-api-python-client
@@ -33,40 +30,5 @@ google-auth
 google-auth-oauthlib
 google-auth-httplib2
 
-
-# Scheduler (A/B Posting & Auto Retrain)
-APScheduler
-
-
-# Slack Notifications
+# Slack
 slack_sdk
-
-
-# Streamlit Dashboard
-streamlit
-pandas
-matplotlib
-
-
-# Machine Learning (Model Training)
-numpy
-scikit-learn
-joblib
-imblearn
-
-
-# Social Data Ingestion
-praw           
-tweepy         
-
-
-# Utility Libraries
-beautifulsoup4
-lxml
-
-
-# Optional (if you use emojis or advanced text handling)
-emoji
-
-
-spacy
