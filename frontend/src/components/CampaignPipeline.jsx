@@ -46,7 +46,7 @@ export default function CampaignPipeline() {
       // ── STEP 1: Scrape ──────────────────────────────────────────────
       setStep('scrape', STATUS.running);
       await delay(300);
-      const scrapeRes = await fetch('http://localhost:8000/api/scrape-generate', {
+      const scrapeRes = await fetch('/api/scrape-generate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url, platform, tone, word_count: 80, n: 4 })
       });
@@ -60,7 +60,7 @@ export default function CampaignPipeline() {
       // ── STEP 2: Generate additional variants ────────────────────────
       setStep('generate', STATUS.running);
       await delay(300);
-      const genRes = await fetch('http://localhost:8000/api/generate', {
+      const genRes = await fetch('/api/generate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic: scrapeData.article_excerpt?.slice(0, 100) || url, platform, tone, word_count: 80, n: 2 })
       });
@@ -78,7 +78,7 @@ export default function CampaignPipeline() {
       for (const v of allVariants.slice(0, 4)) {
         const text = typeof v === 'string' ? v : v.text || '';
         try {
-          const sRes = await fetch('http://localhost:8000/api/sentiment', {
+          const sRes = await fetch('/api/sentiment', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text })
           });
@@ -98,7 +98,7 @@ export default function CampaignPipeline() {
       let winner = candidates[0] || '';
       let abResult = null;
       try {
-        const abRes = await fetch('http://localhost:8000/api/ab-test/multi', {
+        const abRes = await fetch('/api/ab-test/multi', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ variants: candidates })
         });
@@ -118,7 +118,7 @@ export default function CampaignPipeline() {
       setStep('slack', STATUS.running);
       const slackMsg = `🏆 *Campaign Pipeline Result*\n📊 Platform: ${platform} | Tone: ${tone}\n🔗 Source: ${url}\n\n✅ *Winning Post:*\n${winner}\n\n_Sentiment Score: ${sentimentResults[0]?.score?.toFixed(2)} | Multi-variant winner: Variant ${(abResult?.winner_index ?? 0) + 1}_`;
       try {
-        await fetch('http://localhost:8000/api/slack/test', {
+        await fetch('/api/slack/test', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: slackMsg })
         });
@@ -127,7 +127,7 @@ export default function CampaignPipeline() {
 
       // Record to metrics
       try {
-        await fetch('http://localhost:8000/api/metrics/record-demo', {
+        await fetch('/api/metrics/record-demo', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             winner: `Variant ${(abResult?.winner_index ?? 0) + 1}`,

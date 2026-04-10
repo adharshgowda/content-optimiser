@@ -18,7 +18,7 @@ export default function AnalyticsDashboard() {
 
   const fetchMetrics = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/metrics/recent');
+      const res = await fetch('/api/metrics/recent');
       const data = await res.json();
       
       // If backend returns empty, generate beautiful dummy data for the showcase

@@ -39,7 +39,7 @@ export default function CompetitorIntelligence() {
     if (!validUrls.length) return;
     setLoading(true); setError(null); setResult(null); setGeneratedContent({});
     try {
-      const res = await fetch('http://localhost:8000/api/competitor-analysis', {
+      const res = await fetch('/api/competitor-analysis', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ urls: validUrls, your_platform: platform, your_tone: tone })
       });
@@ -52,7 +52,7 @@ export default function CompetitorIntelligence() {
   const stealGap = async (topic) => {
     setGenerating(topic);
     try {
-      const res = await fetch('http://localhost:8000/api/generate', {
+      const res = await fetch('/api/generate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic: `Create a compelling ${platform} post about "${topic}" — an underexplored topic in this niche.`, platform, keywords: [topic], audience: 'marketing professionals', tone, word_count: 80, n: 1 })
       });

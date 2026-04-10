@@ -24,7 +24,7 @@ export default function WebScraperCard({ onGenerated }) {
     if (!url) return;
     setLoading(true); setError(null); setResults(null); setExcerpt('');
     try {
-      const res = await fetch('http://localhost:8000/api/scrape-generate', {
+      const res = await fetch('/api/scrape-generate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url, platform, tone, word_count: wordCount, n: variantsCount })
       });

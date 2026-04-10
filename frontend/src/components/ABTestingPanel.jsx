@@ -28,7 +28,7 @@ export default function ABTestingPanel({ generatedVariants, onAnalysisComplete }
     setLoading(true); setResult(null);
     try {
       const clean = variantTexts.map(v => v.trim()).filter(Boolean);
-      const endpoint = clean.length > 2 ? 'http://localhost:8000/api/ab-test/multi' : 'http://localhost:8000/api/ab-test';
+      const endpoint = clean.length > 2 ? '/api/ab-test/multi' : '/api/ab-test';
       const payload = clean.length > 2 ? { variants: clean } : { variantA: clean[0], variantB: clean[1] };
       const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       const data = await res.json();

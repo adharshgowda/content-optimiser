@@ -12,7 +12,7 @@ export default function HomeDashboard({ onNavigate }) {
   useEffect(() => {
     const fetchGlobalStats = async () => {
       try {
-        const res = await fetch('http://localhost:8000/api/metrics/recent');
+        const res = await fetch('/api/metrics/recent');
         const data = await res.json();
         if (data.metrics && data.metrics.length > 0) {
           setStats({

@@ -15,7 +15,7 @@ export default function MetricsPanel() {
   const pushMetrics = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/metrics/push-daily', {
+      const res = await fetch('/api/metrics/push-daily', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -40,7 +40,7 @@ export default function MetricsPanel() {
   const runManualTraining = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/model/train', { method: 'POST' });
+      const res = await fetch('/api/model/train', { method: 'POST' });
       const data = await res.json();
       setStats(data.stats);
     } catch (err) {
@@ -53,7 +53,7 @@ export default function MetricsPanel() {
   const runAutoRetrainer = async () => {
     setLoading(true);
     try {
-      await fetch('http://localhost:8000/api/model/auto-retrain', { method: 'POST' });
+      await fetch('/api/model/auto-retrain', { method: 'POST' });
       alert('Auto-Retrainer completed and Slack notified!');
     } catch (err) {
       alert('Failed auto-retrain cycle');

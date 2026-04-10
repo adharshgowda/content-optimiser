@@ -55,7 +55,7 @@ export default function GeneratorCard({ onGenerated, persistedState, onPersistSt
     setLoading(true); setError(null); setVariants([]);
     try {
       const kwList = keywords.split(',').map(k => k.trim()).filter(Boolean);
-      const res = await fetch('http://localhost:8000/api/generate', {
+      const res = await fetch('/api/generate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic, platform, keywords: kwList, audience, tone, word_count: parseInt(wordCount), n: parseInt(numVariants) })
       });

@@ -7,7 +7,7 @@ export default function SlackPanel() {
   const handleSend = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/slack/test', {
+      const res = await fetch('/api/slack/test', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message })

@@ -23,7 +23,7 @@ export default function SentimentDashboard({ initialVariants }) {
       // Fire all requests in parallel instead of waiting one-by-one.
       const requests = initialVariants.map(async (v) => {
         const text = v?.text || '';
-        const res = await fetch('http://localhost:8000/api/sentiment', {
+        const res = await fetch('/api/sentiment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text })
@@ -46,7 +46,7 @@ export default function SentimentDashboard({ initialVariants }) {
     if (!manualText.trim()) return;
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/sentiment', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: manualText }) });
+      const res = await fetch('/api/sentiment', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: manualText }) });
       const data = await res.json();
       setResults([{ text: manualText, sentiment: data.sentiment }]);
     } catch (err) { console.error(err); }
