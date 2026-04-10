@@ -15,7 +15,12 @@ Upgraded with:
 import logging
 from typing import List, Union, Dict
 
-from textblob import TextBlob
+try:
+    from textblob import TextBlob
+    TEXTBLOB_AVAILABLE = True
+except ImportError:
+    TEXTBLOB_AVAILABLE = False
+    TextBlob = None
 
 # HuggingFace pipeline
 try:
@@ -31,10 +36,21 @@ try:
 except:
     LANG_AVAILABLE = False
 
-# New Integrations
-from app.integrations.social_ingestor import SocialIngestor
-from app.integrations.trend_fetcher import TrendFetcher
-from app.integrations.sheets_connector import append_row
+# New Integrations — optional, may not be available on serverless
+try:
+    from app.integrations.social_ingestor import SocialIngestor
+except ImportError:
+    SocialIngestor = None
+
+try:
+    from app.integrations.trend_fetcher import TrendFetcher
+except ImportError:
+    TrendFetcher = None
+
+try:
+    from app.integrations.sheets_connector import append_row
+except ImportError:
+    append_row = None
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -71,7 +87,11 @@ def detect_language(text: str) -> str:
 
 
 def fallback_sentiment(text: str) -> Dict:
-    polarity = TextBlob(text).sentiment.polarity
+    if TEXTBLOB_AVAILABLE and TextBlob:
+        polarity = TextBlob(text).sentiment.polarity
+    else:
+        # Ultra-simple fallback when textblob is unavailable
+        polarity = 0.0
     if polarity >= 0.05:
         label = "POSITIVE"
     elif polarity <= -0.05:
@@ -178,7 +198,7 @@ def analyze_sentiment(texts: Union[str, List[str]]) -> List[Dict]:
         if _emotion_model is None:
             _emotion_model = _init_emotion_model()
 
-    trend_engine = TrendFetcher()
+    trend_engine = TrendFetcher() if TrendFetcher else None
     results = []
 
     for text in texts:
@@ -213,7 +233,7 @@ def analyze_sentiment(texts: Union[str, List[str]]) -> List[Dict]:
                 emotions = {}
 
         # TREND SCORE (NEW)
-        trend_score = trend_engine.get_combined_trend_score(text)
+        trend_score = trend_engine.get_combined_trend_score(text) if trend_engine else 0
 
         entry = {
             "text": text,

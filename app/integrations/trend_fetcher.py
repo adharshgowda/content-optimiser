@@ -17,10 +17,20 @@ import re
 from typing import List, Dict, Any
 
 # ---------- Google Trends (Free) ----------
-from pytrends.request import TrendReq
+try:
+    from pytrends.request import TrendReq
+    PYTRENDS_AVAILABLE = True
+except ImportError:
+    TrendReq = None
+    PYTRENDS_AVAILABLE = False
 
 # ---------- Reddit Trending (Free) ----------
-import praw
+try:
+    import praw
+    PRAW_AVAILABLE = True
+except ImportError:
+    praw = None
+    PRAW_AVAILABLE = False
 
 # ---------- Keyword Extraction (Open Source) ----------
 try:
@@ -44,23 +54,31 @@ class TrendFetcher:
         logging.info("Initializing TrendFetcher...")
 
         # Google Trends client
-        try:
-            self.pytrends = TrendReq(hl='en-US', tz=330)
-            logging.info("PyTrends connected successfully.")
-        except Exception as e:
-            logging.error(f"Failed to initialize PyTrends: {e}")
+        if PYTRENDS_AVAILABLE and TrendReq:
+            try:
+                self.pytrends = TrendReq(hl='en-US', tz=330)
+                logging.info("PyTrends connected successfully.")
+            except Exception as e:
+                logging.error(f"Failed to initialize PyTrends: {e}")
+                self.pytrends = None
+        else:
+            logging.warning("PyTrends not available.")
             self.pytrends = None
 
         # Reddit client (Free Tier)
-        try:
-            self.reddit = praw.Reddit(
-                client_id=os.getenv("REDDIT_CLIENT_ID"),
-                client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
-                user_agent="TrendFetcher/1.0 (EducationProject)"
-            )
-            logging.info("Reddit API connected successfully.")
-        except Exception as e:
-            logging.warning(f"Reddit API not configured: {e}")
+        if PRAW_AVAILABLE and praw:
+            try:
+                self.reddit = praw.Reddit(
+                    client_id=os.getenv("REDDIT_CLIENT_ID"),
+                    client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
+                    user_agent="TrendFetcher/1.0 (EducationProject)"
+                )
+                logging.info("Reddit API connected successfully.")
+            except Exception as e:
+                logging.warning(f"Reddit API not configured: {e}")
+                self.reddit = None
+        else:
+            logging.warning("PRAW not available.")
             self.reddit = None
 
         # Load spaCy model for keyword extraction

@@ -29,12 +29,22 @@ except Exception:
 # Dynamic prompt builder
 from .dynamic_prompt2 import generate_engaging_prompt
 
-# Trend optimizer (real-time trends)
-from app.integrations.trend_fetcher import TrendFetcher
-from app.content_engine.trend_based_optimizer3 import TrendBasedOptimizer
+# Trend optimizer (real-time trends) — optional, may not be available on serverless
+try:
+    from app.integrations.trend_fetcher import TrendFetcher
+except ImportError:
+    TrendFetcher = None
 
-# Sheets logging
-from app.integrations.sheets_connector import append_row
+try:
+    from app.content_engine.trend_based_optimizer3 import TrendBasedOptimizer
+except ImportError:
+    TrendBasedOptimizer = None
+
+# Sheets logging — optional
+try:
+    from app.integrations.sheets_connector import append_row
+except ImportError:
+    append_row = None
 
 # Optional tools
 try:
